@@ -1,25 +1,26 @@
 import { useState } from 'react';
 
-export const useForm = ( initialState = {} ) => { 
-    // También se podría poner la validación del formulario dentro de este custom hook
-    
-    const [values, setValues] = useState(initialState);
+export const useForm = ( initialForm = {} ) => {
 
-    //Para resetear el formulario
-    const reset = () => {
-        setValues( initialState );
-    }
+    const [ formState, setFormState ] = useState( initialForm );
 
-
-    const handleInputChange = ({ target }) => {
-
-        setValues({
-            ...values,
-            [ target.name ]: target.value
+    const onInputChange = ({ target }) => {
+        const { name, value } = target;
+        setFormState({
+            ...formState,
+            [ name ]: value
         })
-
     }
 
-    return [ values, handleInputChange, reset ];
+    const onResetForm = () => {
+        setFormState( initialForm );
+    }
+
+    return [
+        ...formState,
+        formState,
+        onInputChange,
+        onResetForm
+    ];
 
 }
